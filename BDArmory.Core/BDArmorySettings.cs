@@ -58,5 +58,7 @@
         [BDAPersistantSettingsField] public static bool PERFORMANCE_LOGGING = false;
         [BDAPersistantSettingsField] public static bool AUTOCATEGORIZE_PARTS = true;
         [BDAPersistantSettingsField] public static bool SHOW_CATEGORIES = false;
+
+        [BDAPersistantSettingsField] public static float PWING_HITPOINT_MULTIPLIER = 4000f;
     }
 }

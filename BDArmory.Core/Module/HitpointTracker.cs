@@ -36,6 +36,7 @@ namespace BDArmory.Core.Module
         #endregion KSP Fields
 
         private readonly float hitpointMultiplier = BDArmorySettings.HITPOINT_MULTIPLIER;
+        private readonly float pWinghitpointMultiplier = BDArmorySettings.PWING_HITPOINT_MULTIPLIER;
 
         private float previousHitpoints;
         private bool _updateHitpoints = false;
@@ -156,7 +157,13 @@ namespace BDArmory.Core.Module
         {
             float hitpoints;
 
-            if (!part.IsMissile())
+            if (part.name == "B9.Aero.Wing.Procedural.TypeA")
+            {
+                var size = part.GetSize();
+                hitpoints = hitpointMultiplier * size.x * size.z * pWinghitpointMultiplier;
+                Debug.Log($"[BDArmory]: HitpointTracker::Overloading hitpoints for part {part.name}");
+            }
+            else if (!part.IsMissile())
             {
                 var averageSize = part.GetAverageBoundSize();
                 var sphereRadius = averageSize * 0.5f;
@@ -179,7 +186,7 @@ namespace BDArmory.Core.Module
                     hitpoints = hitpointMultiplier * part.mass * 333f;
                 }
 
-                hitpoints = Mathf.Round(hitpoints / HpRounding) * HpRounding;
+                    hitpoints = Mathf.Round(hitpoints / HpRounding) * HpRounding;
                 if (hitpoints <= 0) hitpoints = HpRounding;
             }
             else
