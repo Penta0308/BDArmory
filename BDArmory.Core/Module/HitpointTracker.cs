@@ -157,7 +157,7 @@ namespace BDArmory.Core.Module
         {
             float hitpoints;
 
-            if (part.name == "B9.Aero.Wing.Procedural.TypeA")
+            if (part.name.StartsWith("B9.Aero.Wing.Procedural.Type"))
             {
                 var size = part.GetSize();
                 hitpoints = hitpointMultiplier * size.x * size.z * pWinghitpointMultiplier;
