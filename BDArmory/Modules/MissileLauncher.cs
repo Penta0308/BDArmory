@@ -874,8 +874,8 @@ namespace BDArmory.Modules
 
         private void CheckMiss()
         {
-            float sqrDist = (float) ((TargetPosition + (TargetVelocity * Time.fixedDeltaTime)) - (vessel.CoM + (vessel.Velocity() * Time.fixedDeltaTime))).sqrMagnitude;
-            if (sqrDist < 160000 || MissileState == MissileStates.PostThrust)
+            float sqrDist = (float)((TargetPosition + (TargetVelocity * Time.fixedDeltaTime)) - (vessel.CoM + (vessel.Velocity() * Time.fixedDeltaTime))).sqrMagnitude;
+            if ((sqrDist > 160000 || !TargetAcquired) && MissileState == MissileStates.PostThrust)
             {
                 checkMiss = true;
             }
@@ -887,7 +887,7 @@ namespace BDArmory.Modules
             //kill guidance if missileBase has missed
             if (!HasMissed && checkMiss)
             {
-                bool noProgress = MissileState == MissileStates.PostThrust && (Vector3.Dot(vessel.Velocity() - TargetVelocity, TargetPosition - vessel.transform.position) < 0);
+                bool noProgress = MissileState == MissileStates.PostThrust && ((Vector3.Dot(vessel.Velocity() - TargetVelocity, TargetPosition - vessel.transform.position) < 0) || MissileState == MissileStates.PostThrust);
                 if (Vector3.Dot(TargetPosition - transform.position, transform.forward) < 0 || noProgress)
                 {
                     Debug.Log("[BDArmory]: Missile has missed!");
@@ -1468,6 +1468,7 @@ namespace BDArmory.Modules
 
         void EndCruise()
         {
+            Debug.Log("[BDArmory]: EndCruise");
             MissileState = MissileStates.PostThrust;
 
             IEnumerator<Light> light = gameObject.GetComponentsInChildren<Light>().AsEnumerable().GetEnumerator();
